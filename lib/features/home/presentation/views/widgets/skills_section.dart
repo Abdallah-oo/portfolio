@@ -3,8 +3,8 @@ import 'package:portfolio/core/constants/app_strings.dart';
 import 'package:portfolio/core/extensions/responsive.dart';
 import 'package:portfolio/core/themes/app_colors.dart';
 import 'package:portfolio/core/themes/app_text_styles.dart';
+import 'package:portfolio/core/widgets/custom_text.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
 
 class SkillsSection extends StatefulWidget {
   const SkillsSection({super.key});
@@ -36,7 +36,7 @@ class _SkillsSectionState extends State<SkillsSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SectionHeader( title: 'Tech Stack'),
+            _SectionHeader(title: 'Tech Stack'),
             const SizedBox(height: 48),
             GridView.builder(
               shrinkWrap: true,
@@ -45,7 +45,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                 maxCrossAxisExtent: isWide ? 340 : double.infinity,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: isWide ? 1.8 : 3,
+                childAspectRatio:   isWide ? 1.5 : 2.8
               ),
               itemCount: AppStrings.skillCategories.length,
               itemBuilder: (_, i) => _SkillCard(
@@ -66,8 +66,11 @@ class _SkillCard extends StatefulWidget {
   final int index;
   final bool visible;
 
-  const _SkillCard(
-      {required this.data, required this.index, required this.visible});
+  const _SkillCard({
+    required this.data,
+    required this.index,
+    required this.visible,
+  });
 
   @override
   State<_SkillCard> createState() => _SkillCardState();
@@ -97,19 +100,24 @@ class _SkillCardState extends State<_SkillCard> {
               color: _hovered ? AppColors.bgTertiary : AppColors.bgSecondary,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: _hovered ? AppColors.accent.withOpacity(0.5) : AppColors.border,
+                color: _hovered
+                    ? AppColors.accent.withOpacity(0.5)
+                    : AppColors.border,
               ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+            
               children: [
                 Row(
                   children: [
-                    Text(widget.data['icon'] as String,
-                        style: const TextStyle(fontSize: 18)),
+                    CustomText(
+                     text: widget.data['icon'] as String,
+                      style: const TextStyle(fontSize: 18),
+                    ),
                     const SizedBox(width: 8),
-                    Text(
-                      widget.data['category'] as String,
+                    CustomText(
+                     text:  widget.data['category'] as String,
                       style: AppTextStyles.skillCategory.copyWith(
                         color: _hovered
                             ? AppColors.accentLight
@@ -119,13 +127,12 @@ class _SkillCardState extends State<_SkillCard> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Expanded(
+                SizedBox(
+                  height: context.screenWidth*0.05,
                   child: Wrap(
                     spacing: 6,
                     runSpacing: 6,
-                    children: skills
-                        .map((s) => _TechPill(label: s))
-                        .toList(),
+                    children: skills.map((s) => _TechPill(label: s)).toList(),
                   ),
                 ),
               ],
@@ -150,7 +157,7 @@ class _TechPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         border: Border.all(color: AppColors.tagBorder),
       ),
-      child: Text(label, style: AppTextStyles.techTag),
+      child: CustomText(text: label, style: AppTextStyles.techTag),
     );
   }
 }
@@ -158,10 +165,9 @@ class _TechPill extends StatelessWidget {
 // ── Shared Section Header ─────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
-
   final String title;
 
-  const _SectionHeader({ required this.title});
+  const _SectionHeader({required this.title});
 
   @override
   Widget build(BuildContext context) {
