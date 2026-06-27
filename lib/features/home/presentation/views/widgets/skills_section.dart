@@ -45,7 +45,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                 maxCrossAxisExtent: isWide ? 340 : double.infinity,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio:   isWide ? 1.5 : 2.8
+                childAspectRatio:   isWide ? 1.5 : 2.5
               ),
               itemCount: AppStrings.skillCategories.length,
               itemBuilder: (_, i) => _SkillCard(
@@ -60,6 +60,8 @@ class _SkillsSectionState extends State<SkillsSection> {
     );
   }
 }
+
+
 
 class _SkillCard extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -105,38 +107,43 @@ class _SkillCardState extends State<_SkillCard> {
                     : AppColors.border,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
             
-              children: [
-                Row(
-                  children: [
-                    CustomText(
-                     text: widget.data['icon'] as String,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(width: 8),
-                    CustomText(
-                     text:  widget.data['category'] as String,
-                      style: AppTextStyles.skillCategory.copyWith(
-                        color: _hovered
-                            ? AppColors.accentLight
-                            : AppColors.textSecondary,
+             
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              
+                children: [
+                  Row(
+                    children: [
+                      CustomText(
+                       text: widget.data['icon'] as String,
+                        style: const TextStyle(fontSize: 18),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: context.screenWidth*0.05,
-                  child: Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: skills.map((s) => _TechPill(label: s)).toList(),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: CustomText(
+                         text:  widget.data['category'] as String,
+                          style: AppTextStyles.skillCategory.copyWith(
+                            color: _hovered
+                                ? AppColors.accentLight
+                                : AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
+                  const SizedBox(height: 12),
+                  SingleChildScrollView(
+                    child: Wrap(
+                      clipBehavior: Clip.none,
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: skills.map((s) => _TechPill(label: s)).toList(),
+                    ),
+                  ),
+                ],
+              ),
+          
           ),
         ),
       ),

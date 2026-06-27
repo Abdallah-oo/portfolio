@@ -173,7 +173,7 @@ class _ProjectImage extends StatelessWidget {
                 child: Image.asset(
                   p['image'] as String,
 
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (_, _, _) => Container(
                     color: AppColors.bgTertiary,
                     child: Center(
                       child: Text(

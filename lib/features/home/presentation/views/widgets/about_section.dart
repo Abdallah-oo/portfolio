@@ -218,7 +218,9 @@ class _RightStats extends StatelessWidget {
                 padding: const EdgeInsets.all(3),
                 child: CircleAvatar(
                   radius: 90,
-                  backgroundImage: AssetImage('assets/images/profile/profile.jpg'),
+                  backgroundImage: AssetImage(
+                    'assets/images/profile/profile.jpg',
+                  ),
                   backgroundColor: AppColors.bgSecondary,
                 ),
               ),
@@ -234,7 +236,7 @@ class _RightStats extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: isWide ? (3 / 2.5) : (3 / 1.5),
+                childAspectRatio: isWide ? (3 / 2.7) : (3 / 2),
               ),
               itemCount: _stats.length,
               itemBuilder: (_, i) => _StatCard(
@@ -257,12 +259,8 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = context.responsiveWidth(
-      max: 36,
-      min: 15,
-      percentage: 0.06,
-    );
-  
+
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -270,32 +268,45 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.border),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ShaderMask(
-            shaderCallback: (b) => AppColors.accentGradient.createShader(b),
-            blendMode: BlendMode.srcIn,
-            child: CustomText(
-            text:  value ,
-              style:  TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                height: 1,
+      child: Container(
+        color: Colors.red,
+        child: SizedBox(
+          height: context.screenWidth * 0.06,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ShaderMask(
+                  shaderCallback: (b) => AppColors.accentGradient.createShader(b),
+                  blendMode: BlendMode.srcIn,
+                  child: CustomText(
+                    text: value,
+                    style: TextStyle(
+                      fontSize:100,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                     
+                    ),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 8),
+            
+                Expanded(
+                  child: CustomText(
+                    maxLines: 2,
+                    text: label,
+                    style: AppTextStyles.cardBody.copyWith(
+                      fontSize: 12,
+                     
+                    ),
+                  ),
+                ),
+             
+            ],
           ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: CustomText(
-              maxLines: 2,
-              text: label,
-              style: AppTextStyles.cardBody.copyWith(fontSize: 12, height: 1.4),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
