@@ -268,44 +268,41 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.border),
       ),
-      child: Container(
-        color: Colors.red,
-        child: SizedBox(
-          height: context.screenWidth * 0.06,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ShaderMask(
-                  shaderCallback: (b) => AppColors.accentGradient.createShader(b),
-                  blendMode: BlendMode.srcIn,
-                  child: CustomText(
-                    text: value,
-                    style: TextStyle(
-                      fontSize:100,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                     
-                    ),
+      child: SizedBox(
+        height: context.screenWidth * 0.06,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ShaderMask(
+                shaderCallback: (b) => AppColors.accentGradient.createShader(b),
+                blendMode: BlendMode.srcIn,
+                child: CustomText(
+                  text: value,
+                  style: TextStyle(
+                    fontSize:100,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                   
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-            
-                Expanded(
-                  child: CustomText(
-                    maxLines: 2,
-                    text: label,
-                    style: AppTextStyles.cardBody.copyWith(
-                      fontSize: 12,
-                     
-                    ),
+            ),
+            const SizedBox(height: 8),
+          
+              Expanded(
+                child: CustomText(
+                  maxLines: 2,
+                  text: label,
+                  style: AppTextStyles.cardBody.copyWith(
+                    fontSize: 12,
+                   
                   ),
                 ),
-             
-            ],
-          ),
+              ),
+           
+          ],
         ),
       ),
     );
