@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+    <base href="$FLUTTER_BASE_HREF" />
+
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="A new Flutter project." />
+
+    <!-- iOS meta tags & icons -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="portfolio" />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <title>portfolio</title>
+    <link rel="manifest" href="manifest.json" />
+  </head>
+  <body>
+  <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  #loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #0a0a0f;
+    gap: 24px;
+    opacity: 1;
+    transition: opacity 0.4s ease-out;
+  }
+  #loading.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #loading-logo {
+    font-family: monospace;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #6c63ff, #a78bfa);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  #loading-bar-container {
+    width: 160px;
+    height: 2px;
+    background-color: #1e1e2e;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  /* progress bar بتتحرك جوه بعضها بشكل مستمر - مش بتوقف عند مدة ثابتة */
+  #loading-bar {
+    height: 100%;
+    width: 40%;
+    background: linear-gradient(90deg, #6c63ff, #a78bfa);
+    border-radius: 2px;
+    animation: indeterminate 1.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes indeterminate {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+  }
+</style>
+
+<div id="loading">
+  <div id="loading-logo">&lt; AA /&gt;</div>
+  <div id="loading-bar-container">
+    <div id="loading-bar"></div>
+  </div>
+</div>
+
+<script src="flutter_bootstrap.js" async></script>
+
+<script>
+  window.addEventListener("flutter-first-frame", function () {
+    var loading = document.getElementById("loading");
+    loading.classList.add("fade-out");
+    setTimeout(function () {
+      loading.remove();
+    }, 400); // نفس مدة الـ transition
+  });
+</script>
+  </body>
+</html>
