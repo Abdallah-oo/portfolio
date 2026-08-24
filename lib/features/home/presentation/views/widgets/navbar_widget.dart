@@ -36,15 +36,16 @@ class _NavbarWidgetState extends State<NavbarWidget> {
 
     return ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Container(
+          padding: EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
               colors: [
-                Color.fromARGB(124, 0, 0, 0),
-                Color.fromARGB(36, 0, 0, 0),
+                Color.fromARGB(150, 0, 0, 0),
+                Color.fromARGB(50, 0, 0, 0),
                 Color.fromARGB(0, 0, 0, 0),
               ],
               stops: [0.0, 0.7, 1.0],

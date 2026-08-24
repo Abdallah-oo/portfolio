@@ -1,120 +1,278 @@
 <!doctype html>
 <html>
-  <head>
-    <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+<head>
+  <base href="$FLUTTER_BASE_HREF" />
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description" content="A new Flutter project." />
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-    <base href="$FLUTTER_BASE_HREF" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="portfolio" />
+  <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
-    <meta charset="UTF-8" />
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-    <meta name="description" content="A new Flutter project." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-    <!-- iOS meta tags & icons -->
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="portfolio" />
-    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+  <title>portfolio</title>
+  <link rel="manifest" href="manifest.json" />
+</head>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-
-    <title>portfolio</title>
-    <link rel="manifest" href="manifest.json" />
-  </head>
-  <body>
+<body>
   <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-  }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #050506;
+    }
 
-  #loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: #0a0a0f;
-    gap: 24px;
-    opacity: 1;
-    transition: opacity 0.4s ease-out;
-  }
-  #loading.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
+    #loading {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      background: #050506;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
 
-  #loading-logo {
-    font-family: monospace;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #6c63ff, #a78bfa);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
+    #loading.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-  #loading-bar-container {
-    width: 160px;
-    height: 2px;
-    background-color: #1e1e2e;
-    border-radius: 2px;
-    overflow: hidden;
-  }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      will-change: transform;
+    }
 
-  /* progress bar بتتحرك جوه بعضها بشكل مستمر - مش بتوقف عند مدة ثابتة */
-  #loading-bar {
-    height: 100%;
-    width: 40%;
-    background: linear-gradient(90deg, #6c63ff, #a78bfa);
-    border-radius: 2px;
-    animation: indeterminate 1.2s ease-in-out infinite;
-  }
+    .orb-1 {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, #6c63ff, transparent 70%);
+      top: -120px;
+      left: -100px;
+      animation: float1 14s ease-in-out infinite;
+    }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
+    .orb-2 {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, #ff6ec7, transparent 70%);
+      bottom: -140px;
+      right: -80px;
+      animation: float2 16s ease-in-out infinite;
+    }
 
-  @keyframes indeterminate {
-    0%   { transform: translateX(-100%); }
-    100% { transform: translateX(250%); }
-  }
-</style>
+    @keyframes float1 {
 
-<div id="loading">
-  <div id="loading-logo">&lt; AA /&gt;</div>
-  <div id="loading-bar-container">
-    <div id="loading-bar"></div>
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      50% {
+        transform: translate(60px, 40px);
+      }
+    }
+
+    @keyframes float2 {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      50% {
+        transform: translate(-50px, -30px);
+      }
+    }
+
+    #grain {
+      position: absolute;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    #loading-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      animation: rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    #logo-svg {
+      width: 104px;
+      height: 42px;
+      overflow: visible;
+    }
+
+    #logo-svg path {
+      fill: none;
+      stroke: url(#logoGradient);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      animation: draw 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards;
+    }
+
+    #loading-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    #loading-bar-container {
+      width: 200px;
+      height: 2px;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    #loading-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #6c63ff, #c4bdfd);
+      transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #loading-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #loading-percent {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: rgba(255, 255, 255, 0.55);
+      font-variant-numeric: tabular-nums;
+      min-width: 30px;
+    }
+
+    #loading-sub {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+
+  <div id="loading">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div id="grain"></div>
+
+    <div id="loading-content">
+      <svg id="logo-svg" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#8b83ff" />
+            <stop offset="100%" stop-color="#6c63ff" />
+          </linearGradient>
+        </defs>
+        <path d="M6 32 L16 8 L26 32 M10 22 L22 22 M42 32 L52 8 L62 32 M46 22 L58 22" />
+      </svg>
+
+      <div id="loading-meta">
+        <div id="loading-bar-container">
+          <div id="loading-bar"></div>
+        </div>
+        <div id="loading-row">
+          <span id="loading-percent">0%</span>
+          <span id="loading-sub">Loading portfolio</span>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<script src="flutter_bootstrap.js" async></script>
+  <script src="flutter_bootstrap.js" async></script>
 
-<script>
-  window.addEventListener("flutter-first-frame", function () {
-    var loading = document.getElementById("loading");
-    loading.classList.add("fade-out");
-    setTimeout(function () {
-      loading.remove();
-    }, 400); // نفس مدة الـ transition
-  });
-</script>
-  </body>
+  <script>
+    (function () {
+      var bar = document.getElementById("loading-bar");
+      var percentLabel = document.getElementById("loading-percent");
+      var loading = document.getElementById("loading");
+      var progress = 0;
+      var target = 0;
+      var finished = false;
+      var raf = null;
+
+      function setProgress(p) {
+        progress = p;
+        bar.style.width = progress + "%";
+        percentLabel.textContent = Math.round(progress) + "%";
+      }
+
+      function tick() {
+        var diff = target - progress;
+        progress += diff * 0.06;
+        if (Math.abs(diff) < 0.1) progress = target;
+        setProgress(progress);
+        if (!finished || progress < 100) {
+          raf = requestAnimationFrame(tick);
+        }
+      }
+
+      target = 92;
+      raf = requestAnimationFrame(tick);
+
+      window.addEventListener("flutter-first-frame", function () {
+        finished = true;
+        target = 100;
+        setTimeout(function () {
+          loading.classList.add("fade-out");
+          setTimeout(function () {
+            loading.remove();
+          }, 600);
+        }, 220);
+      });
+    })();
+  </script>
+</body>
+
 </html>
