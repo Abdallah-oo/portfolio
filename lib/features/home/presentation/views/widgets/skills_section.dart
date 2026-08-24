@@ -45,7 +45,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                 maxCrossAxisExtent: isWide ? 340 : double.infinity,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio:   isWide ? 1.5 : 2.5
+                childAspectRatio:   isWide ? 1 : 2.5
               ),
               itemCount: AppStrings.skillCategories.length,
               itemBuilder: (_, i) => _SkillCard(
@@ -107,11 +107,11 @@ class _SkillCardState extends State<_SkillCard> {
                     : AppColors.border,
               ),
             ),
-            
-             
+
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-              
+
                 children: [
                   Row(
                     children: [
@@ -132,7 +132,7 @@ class _SkillCardState extends State<_SkillCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 25),
                   SingleChildScrollView(
                     child: Wrap(
                       clipBehavior: Clip.none,
@@ -143,7 +143,7 @@ class _SkillCardState extends State<_SkillCard> {
                   ),
                 ],
               ),
-          
+
           ),
         ),
       ),

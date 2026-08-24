@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:portfolio/core/themes/app_colors.dart';
@@ -7,11 +9,7 @@ class NavbarWidget extends StatefulWidget {
   final List<GlobalKey> sectionKeys;
   final int activeIndex;
 
-  const NavbarWidget({
-    super.key,
-    required this.sectionKeys,
-    required this.activeIndex,
-  });
+  const NavbarWidget({super.key, required this.sectionKeys, required this.activeIndex});
 
   @override
   State<NavbarWidget> createState() => _NavbarWidgetState();
@@ -19,13 +17,7 @@ class NavbarWidget extends StatefulWidget {
 
 class _NavbarWidgetState extends State<NavbarWidget> {
   final bool _scrolled = false;
-  final List<String> _labels = [
-    'Home',
-    'Projects',
-    'About',
-    'Skills',
-    'Contact',
-  ];
+  final List<String> _labels = ['Home', 'Projects', 'About', 'Skills', 'Contact'];
 
   void _scrollToSection(int index) {
     final ctx = widget.sectionKeys[index].currentContext;
@@ -42,84 +34,91 @@ class _NavbarWidgetState extends State<NavbarWidget> {
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 768;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        color: _scrolled
-            ? AppColors.bgSecondary.withOpacity(0.95)
-            : Colors.transparent,
-        border: _scrolled
-            ? const Border(
-                bottom: BorderSide(color: AppColors.border, width: 0.5),
-              )
-            : null,
-        boxShadow: _scrolled
-            ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20)]
-            : [],
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: isWide ? 64 : 20,
-          vertical: 16,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ShaderMask(
-              shaderCallback: (b) => AppColors.accentGradient.createShader(b),
-              child: Text(
-                '< AA />',
-                style: TextStyle(
-                  fontFamily: 'FiraCode',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  letterSpacing: 1,
-                ),
-              ),
-            ).animate().fadeIn(duration: 500.ms),
-
-            if (isWide)
-              Row(
-                children: List.generate(_labels.length, (i) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 32),
-                    child: _NavLink(
-                      label: _labels[i],
-                      active: widget.activeIndex == i,
-                      onTap: () => _scrollToSection(i),
-                    ),
-                  );
-                }),
-              ).animate().fadeIn(delay: 200.ms, duration: 500.ms),
-
-            if (!isWide)
-              IconButton(
-                icon: const Icon(
-                  Icons.menu_rounded,
-                  color: AppColors.textSecondary,
-                ),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: AppColors.bgSecondary,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Color.fromARGB(124, 0, 0, 0),
+                Color.fromARGB(36, 0, 0, 0),
+                Color.fromARGB(0, 0, 0, 0),
+              ],
+              stops: [0.0, 0.7, 1.0],
+            ),
+          ),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            decoration: BoxDecoration(
+              color: _scrolled ? AppColors.bgSecondary.withOpacity(0.95) : Colors.transparent,
+              border: _scrolled
+                  ? const Border(bottom: BorderSide(color: AppColors.border, width: 0.5))
+                  : null,
+              boxShadow: _scrolled
+                  ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20)]
+                  : [],
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: isWide ? 64 : 20, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ShaderMask(
+                    shaderCallback: (b) => AppColors.accentGradient.createShader(b),
+                    child: Text(
+                      '< AA />',
+                      style: TextStyle(
+                        fontFamily: 'FiraCode',
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 1,
                       ),
                     ),
-                    builder: (_) => _MobileMenu(
-                      labels: _labels,
-                      activeIndex: widget.activeIndex,
-                      onTap: (i) {
-                        Navigator.pop(context);
-                        _scrollToSection(i);
+                  ).animate().fadeIn(duration: 500.ms),
+
+                  if (isWide)
+                    Row(
+                      children: List.generate(_labels.length, (i) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 32),
+                          child: _NavLink(
+                            label: _labels[i],
+                            active: widget.activeIndex == i,
+                            onTap: () => _scrollToSection(i),
+                          ),
+                        );
+                      }),
+                    ).animate().fadeIn(delay: 200.ms, duration: 500.ms),
+
+                  if (!isWide)
+                    IconButton(
+                      icon: const Icon(Icons.menu_rounded, color: AppColors.textSecondary),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: AppColors.bgSecondary,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (_) => _MobileMenu(
+                            labels: _labels,
+                            activeIndex: widget.activeIndex,
+                            onTap: (i) {
+                              Navigator.pop(context);
+                              _scrollToSection(i);
+                            },
+                          ),
+                        );
                       },
                     ),
-                  );
-                },
+                ],
               ),
-          ],
+            ),
+          ),
         ),
       ),
     );
@@ -131,11 +130,7 @@ class _NavLink extends StatefulWidget {
   final bool active;
   final VoidCallback onTap;
 
-  const _NavLink({
-    required this.label,
-    required this.active,
-    required this.onTap,
-  });
+  const _NavLink({required this.label, required this.active, required this.onTap});
 
   @override
   State<_NavLink> createState() => _NavLinkState();
@@ -157,8 +152,8 @@ class _NavLinkState extends State<_NavLink> {
             Text(
               widget.label,
               style: widget.active || _hovered
-                  ? AppTextStyles.navLinkActive
-                  : AppTextStyles.navLink,
+                  ? AppTextStyles.navLinkActive.copyWith(fontSize: 16)
+                  : AppTextStyles.navLink.copyWith(fontSize: 16,color: const Color.fromARGB(255, 189, 190, 190)),
             ),
             const SizedBox(height: 3),
             AnimatedContainer(
@@ -182,11 +177,7 @@ class _MobileMenu extends StatelessWidget {
   final int activeIndex;
   final void Function(int) onTap;
 
-  const _MobileMenu({
-    required this.labels,
-    required this.activeIndex,
-    required this.onTap,
-  });
+  const _MobileMenu({required this.labels, required this.activeIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
