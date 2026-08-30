@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/extensions/responsive.dart';
 import 'package:portfolio/core/themes/app_colors.dart';
 import 'package:portfolio/core/themes/app_text_styles.dart';
 
@@ -14,14 +15,14 @@ class SectionHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-     
+
         const SizedBox(height: 8),
         ShaderMask(
           shaderCallback: (b) => AppColors.accentGradient.createShader(b),
           blendMode: BlendMode.srcIn,
           child: Text(
             title,
-            style: MediaQuery.of(context).size.width > 768
+            style: context.isDesktop
                 ? AppTextStyles.sectionTitle
                 : AppTextStyles.sectionTitleMobile,
           ),

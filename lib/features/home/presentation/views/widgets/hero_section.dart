@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/core/constants/app_strings.dart';
+import 'package:portfolio/core/extensions/responsive.dart';
 import 'package:portfolio/core/themes/app_colors.dart';
 import 'package:portfolio/core/themes/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -83,8 +84,9 @@ class _HeroSectionState extends State<HeroSection> {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isWide = w > 768;
+
+  final isWide = context.isDesktop;
+
 
     return Container(
       width: double.infinity,

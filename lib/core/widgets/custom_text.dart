@@ -25,7 +25,7 @@ class CustomText extends StatelessWidget {
       textAlign: align ?? TextAlign.start,
       style: style ?? AppTextStyles.cardBody,
       maxLines: maxLines ?? 1,
-      minFontSize: minFontSize ?? 9,
+      minFontSize: minFontSize ?? 11,
       overflow: TextOverflow.ellipsis,
     );
   }

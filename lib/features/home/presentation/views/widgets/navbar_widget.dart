@@ -2,22 +2,49 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:portfolio/core/extensions/responsive.dart';
 import 'package:portfolio/core/themes/app_colors.dart';
 import 'package:portfolio/core/themes/app_text_styles.dart';
 
 class NavbarWidget extends StatefulWidget {
   final List<GlobalKey> sectionKeys;
   final int activeIndex;
+  final ScrollController scrollController; // ✅ إضافة جديدة
 
-  const NavbarWidget({super.key, required this.sectionKeys, required this.activeIndex});
+  const NavbarWidget({
+    super.key,
+    required this.sectionKeys,
+    required this.activeIndex,
+    required this.scrollController, // ✅ إضافة جديدة
+  });
 
   @override
   State<NavbarWidget> createState() => _NavbarWidgetState();
 }
 
 class _NavbarWidgetState extends State<NavbarWidget> {
-  final bool _scrolled = false;
+  bool _scrolled = false; // ✅ بقت قابلة للتغيير (شلنا final)
   final List<String> _labels = ['Home', 'Projects', 'About', 'Skills', 'Contact'];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_onScroll); // ✅ إضافة جديدة
+  }
+
+  void _onScroll() {
+    // ✅ دالة جديدة
+    final scrolled = widget.scrollController.offset > 10;
+    if (scrolled != _scrolled) {
+      setState(() => _scrolled = scrolled);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_onScroll); // ✅ إضافة جديدة
+    super.dispose();
+  }
 
   void _scrollToSection(int index) {
     final ctx = widget.sectionKeys[index].currentContext;
@@ -30,16 +57,31 @@ class _NavbarWidgetState extends State<NavbarWidget> {
     }
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width > 768;
+    final isWide = context.isDesktop;
+
+    // ✅ التعديل: لو مش scrolled، من غير BackdropFilter خالص
+    if (!_scrolled) {
+      return _buildNavContent(context, isWide);
+    }
 
     return ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 5),
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: _buildNavContent(context, isWide),
+      ),
+    );
+  }
+
+  // ✅ استخرجنا محتوى الـ navbar لدالة منفصلة عشان نستخدمها في الحالتين
+  Widget _buildNavContent(BuildContext context, bool isWide) {
+    return Container(
+
+
+
           decoration: BoxDecoration(
+
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
@@ -52,8 +94,10 @@ class _NavbarWidgetState extends State<NavbarWidget> {
             ),
           ),
           child: AnimatedContainer(
+            padding: EdgeInsets.symmetric(vertical: 5),
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
+
               color: _scrolled ? AppColors.bgSecondary.withOpacity(0.95) : Colors.transparent,
               border: _scrolled
                   ? const Border(bottom: BorderSide(color: AppColors.border, width: 0.5))
@@ -70,7 +114,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                   ShaderMask(
                     shaderCallback: (b) => AppColors.accentGradient.createShader(b),
                     child: Text(
-                      '< AA />',
+                      '< AA / >',
                       style: TextStyle(
                         fontFamily: 'FiraCode',
                         fontSize: 20,
@@ -120,9 +164,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }
 
@@ -154,7 +196,10 @@ class _NavLinkState extends State<_NavLink> {
               widget.label,
               style: widget.active || _hovered
                   ? AppTextStyles.navLinkActive.copyWith(fontSize: 16)
-                  : AppTextStyles.navLink.copyWith(fontSize: 16,color: const Color.fromARGB(255, 189, 190, 190)),
+                  : AppTextStyles.navLink.copyWith(
+                      fontSize: 16,
+                      color: const Color.fromARGB(255, 189, 190, 190),
+                    ),
             ),
             const SizedBox(height: 3),
             AnimatedContainer(

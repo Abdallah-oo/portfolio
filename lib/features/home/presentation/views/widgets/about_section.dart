@@ -19,12 +19,12 @@ class _AboutSectionState extends State<AboutSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = context.screenWidth > 900;
+    final isDesktop = context.isDesktop;
 
     return VisibilityDetector(
       key: const Key('about'),
       onVisibilityChanged: (info) {
-        if (info.visibleFraction > 0.2 && !_visible) {
+        if (info.visibleFraction > 0.15 && !_visible) {
           setState(() => _visible = true);
         }
       },
@@ -32,38 +32,48 @@ class _AboutSectionState extends State<AboutSection> {
         width: double.infinity,
         color: AppColors.bgSecondary,
         padding: EdgeInsets.symmetric(
-          horizontal: isWide ? 64 : 24,
-          vertical: 80,
+          horizontal: isDesktop ? 64 : 24,
+          vertical: isDesktop ? 100 : 64,
         ),
-        child: isWide
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(flex: 5, child: _LeftContent(visible: _visible)),
-                  const SizedBox(width: 64),
-                  Expanded(
-                    flex: 4,
-                    child: _RightStats(visible: _visible, isWide: isWide),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1300),
+            child: isDesktop
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 6, child: _LeftContent(visible: _visible)),
+                      const SizedBox(width: 72),
+                      Expanded(flex: 4, child: _RightProfile(visible: _visible)),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _RightProfile(visible: _visible),
+                      const SizedBox(height: 48),
+                      _LeftContent(visible: _visible),
+                    ],
                   ),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _LeftContent(visible: _visible),
-                  const SizedBox(height: 48),
-                  _RightStats(visible: _visible, isWide: isWide),
-                ],
-              ),
+          ),
+        ),
       ),
     );
   }
 }
 
+// ── العمود الأيسر: النص + الإحصائيات + التعليم ─────────────────────────────
+
 class _LeftContent extends StatelessWidget {
   final bool visible;
-
   const _LeftContent({required this.visible});
+
+  static const List<Map<String, String>> _stats = [
+    {'value': '1+', 'label': 'Years of\nExperience'},
+    {'value': '7', 'label': 'Production-Quality\nProjects'},
+    {'value': '3.15', 'label': 'GPA at\nZagazig University'},
+    {'value': 'A+', 'label': 'Graduation\nProject Grade'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +81,13 @@ class _LeftContent extends StatelessWidget {
       opacity: visible ? 1 : 0,
       duration: const Duration(milliseconds: 600),
       child: AnimatedSlide(
-        offset: visible ? Offset.zero : const Offset(-0.1, 0),
+        offset: visible ? Offset.zero : const Offset(-0.08, 0),
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeOutCubic,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionHeader(title: 'About Me'),
+            const SectionHeader(title: 'About Me'),
             const SizedBox(height: 28),
             Text(
               "I'm a Flutter Developer from Cairo, Egypt, passionate about building "
@@ -93,217 +103,347 @@ class _LeftContent extends StatelessWidget {
               "to delivering real value through technology.",
               style: AppTextStyles.heroSummary,
             ),
-            const SizedBox(height: 28),
 
-            // Education card
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.bgPrimary,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 44),
+
+            // ── شريط الإحصائيات بفواصل رأسية ──────────────
+            _StatsStrip(stats: _stats),
+
+            const SizedBox(height: 44),
+
+            // ── كارت التعليم بشكل Timeline ──────────────────
+            const _EducationTimeline(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── شريط الإحصائيات ──────────────────────────────────────────────────────
+
+class _StatsStrip extends StatelessWidget {
+  final List<Map<String, String>> stats;
+  const _StatsStrip({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      // ✅ Wrap بدل Row/Grid: لو المساحة ضاقت، العنصر بينزل سطر جديد بدل overflow
+      spacing: 0,
+      runSpacing: 24,
+      children: List.generate(stats.length * 2 - 1, (i) {
+        // كل عنصر زوجي = رقم، كل عنصر فردي = فاصل رأسي
+        if (i.isEven) {
+          final stat = stats[i ~/ 2];
+          return SizedBox(
+            width: 130,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShaderMask(
+                  shaderCallback: (b) => AppColors.accentGradient.createShader(b),
+                  blendMode: BlendMode.srcIn,
+                  child: Text(
+                    stat['value']!,
+                    style: const TextStyle(
+                      fontSize: 34,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      fontFamily: 'FiraCode',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(stat['label']!, style: AppTextStyles.cardBody.copyWith(fontSize: 12.5)),
+              ],
+            ),
+          );
+        } else {
+          return Container(
+            width: 1,
+            height: 50,
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            color: AppColors.border,
+          );
+        }
+      }),
+    );
+  }
+}
+
+// ── كارت التعليم بشكل Timeline ───────────────────────────────────────────
+
+class _EducationTimeline extends StatelessWidget {
+  const _EducationTimeline();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // ── الخط الرأسي: بيمتد تلقائيًا بارتفاع الـ Stack ──
+        Positioned(
+          left: 5,
+          top: 16,
+          bottom: 4,
+          child: Container(width: 1.5, color: AppColors.border),
+        ),
+
+        // ── المحتوى ─────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.only(left: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.school_outlined,
-                        color: AppColors.accent,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 8),
-                      Text('Education', style: AppTextStyles.cardSubtitle),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                  const Icon(Icons.school_outlined, color: AppColors.accent, size: 16),
+                  const SizedBox(width: 8),
                   Text(
-                    AppStrings.university,
-                    style: AppTextStyles.cardTitle.copyWith(fontSize: 16),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(AppStrings.degree, style: AppTextStyles.cardBody),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppStrings.gpa,
+                    'Education',
                     style: AppTextStyles.techTag.copyWith(
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppStrings.eduPeriod,
-                    style: AppTextStyles.cardBody.copyWith(
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.accentGlow,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: AppColors.accent.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.star_rounded,
-                          color: AppColors.accent,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: CustomText(
-                            maxLines: 2,
-                            text: AppStrings.gradProject,
-                            style: AppTextStyles.techTag.copyWith(fontSize: 11),
-                          ),
-                        ),
-                      ],
+                      color: AppColors.accent,
+                      letterSpacing: 1.5,
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(AppStrings.university, style: AppTextStyles.cardTitle.copyWith(fontSize: 17)),
+              const SizedBox(height: 4),
+              Text(AppStrings.degree, style: AppTextStyles.cardBody),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 10,
+                runSpacing: 4,
+                children: [
+                  Text(
+                    AppStrings.gpa,
+                    style: AppTextStyles.techTag.copyWith(color: AppColors.secondary),
+                  ),
+                  Text('•', style: AppTextStyles.cardBody.copyWith(color: AppColors.textTertiary)),
+                  Text(
+                    AppStrings.eduPeriod,
+                    style: AppTextStyles.cardBody.copyWith(color: AppColors.textTertiary),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.accentGlow,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.accent.withOpacity(0.3)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.star_rounded, color: AppColors.accent, size: 15),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: CustomText(
+                        maxLines: 2,
+                        text: AppStrings.gradProject,
+                        style: AppTextStyles.techTag.copyWith(fontSize: 11.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+
+        // ── النقطة (الدوت) فوق الخط ──────────────────
+        Positioned(
+          left: 0,
+          top: 4,
+          child: Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              gradient: AppColors.accentGradient,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accent.withOpacity(0.5),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class _RightStats extends StatelessWidget {
-  final bool isWide;
-  final bool visible;
-  const _RightStats({required this.visible, required this.isWide});
+// ── العمود الأيمن: الصورة الشخصية بإطار مميز ────────────────────────────────
 
-  final List<Map<String, String>> _stats = const [
-    {'value': '1+', 'label': 'Year of Flutter\nExperience'},
-    {'value': '4', 'label': 'Production-Quality\nProjects'},
-    {'value': '3.15', 'label': 'GPA at\nZagazig University'},
-    {'value': 'A+', 'label': 'Graduation\nProject Grade'},
-  ];
+class _RightProfile extends StatelessWidget {
+  final bool visible;
+  const _RightProfile({required this.visible});
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = context.isDesktop;
+    final size = isDesktop ? 300.0 : 220.0;
+
     return AnimatedOpacity(
       opacity: visible ? 1 : 0,
       duration: const Duration(milliseconds: 700),
       child: AnimatedSlide(
-        offset: visible ? Offset.zero : const Offset(0.1, 0),
+        offset: visible ? Offset.zero : const Offset(0.08, 0),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeOutCubic,
-        child: Column(
-          children: [
-            // ── Profile Image ──────────────────────────────
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: AppColors.accentGradient,
-              ),
-              padding: const EdgeInsets.all(3),
-              child: Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bgPrimary,
-                ),
-                padding: const EdgeInsets.all(3),
-                child: CircleAvatar(
-                  radius: 90,
-                  backgroundImage: AssetImage(
-                    'assets/images/profile/profile.jpg',
+        child: Center(
+          child: SizedBox(
+            // ✅ مساحة إضافية حوالين الصورة عشان البادچ العائم ميعملش overflow
+            width: size + 40,
+            height: size + 60,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              children: [
+                // ── زوايا ديكورية (زي viewfinder) ─────────
+                Positioned(top: 10, child: _CornerFrame(size: size)),
+
+                // ── الصورة نفسها ──────────────────────────
+                Positioned(
+                  top: 30,
+                  child: Container(
+                    width: size - 40,
+                    height: size - 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.border, width: 1),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/profile/profile.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  backgroundColor: AppColors.bgSecondary,
                 ),
-              ),
-            ),
 
-            const SizedBox(height: 32),
-
-            // ── Stats Grid ─────────────────────────────────
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: isWide ? (3 / 2.7) : (3 / 2),
-              ),
-              itemCount: _stats.length,
-              itemBuilder: (_, i) => _StatCard(
-                value: _stats[i]['value']!,
-                label: _stats[i]['label']!,
-              ),
+                // ── بادچ "Available for Work" عائم ────────
+                Positioned(bottom: 10, child: const _AvailabilityBadge()),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _StatCard extends StatelessWidget {
-  final String value;
-  final String label;
-
-  const _StatCard({required this.value, required this.label});
+class _CornerFrame extends StatelessWidget {
+  final double size;
+  const _CornerFrame({required this.size});
 
   @override
   Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _CornerPainter(color: AppColors.accent)),
+    );
+  }
+}
 
+class _CornerPainter extends CustomPainter {
+  final Color color;
+  _CornerPainter({required this.color});
 
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    const len = 28.0;
+
+    // الزاوية العلوية اليسرى
+    canvas.drawLine(const Offset(0, 0), const Offset(len, 0), paint);
+    canvas.drawLine(const Offset(0, 0), const Offset(0, len), paint);
+
+    // الزاوية العلوية اليمنى
+    canvas.drawLine(Offset(size.width, 0), Offset(size.width - len, 0), paint);
+    canvas.drawLine(Offset(size.width, 0), Offset(size.width, len), paint);
+
+    // الزاوية السفلية اليسرى
+    canvas.drawLine(Offset(0, size.height), Offset(len, size.height), paint);
+    canvas.drawLine(Offset(0, size.height), Offset(0, size.height - len), paint);
+
+    // الزاوية السفلية اليمنى
+    canvas.drawLine(Offset(size.width, size.height), Offset(size.width - len, size.height), paint);
+    canvas.drawLine(Offset(size.width, size.height), Offset(size.width, size.height - len), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _AvailabilityBadge extends StatefulWidget {
+  const _AvailabilityBadge();
+
+  @override
+  State<_AvailabilityBadge> createState() => _AvailabilityBadgeState();
+}
+
+class _AvailabilityBadgeState extends State<_AvailabilityBadge>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
+      ..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.bgPrimary,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: SizedBox(
-        height: context.screenWidth * 0.06,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ShaderMask(
-                shaderCallback: (b) => AppColors.accentGradient.createShader(b),
-                blendMode: BlendMode.srcIn,
-                child: CustomText(
-                  text: value,
-                  style: TextStyle(
-                    fontSize:100,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                   
-                  ),
-                ),
-              ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FadeTransition(
+            opacity: _ctrl,
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(color: Color(0xFF4ADE80), shape: BoxShape.circle),
             ),
-            const SizedBox(height: 8),
-          
-              Expanded(
-                child: CustomText(
-                  maxLines: 2,
-                  text: label,
-                  style: AppTextStyles.cardBody.copyWith(
-                    fontSize: 12,
-                   
-                  ),
-                ),
-              ),
-           
-          ],
-        ),
+          ),
+          const SizedBox(width: 8),
+          const Text(
+            'Available for Work',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white),
+          ),
+        ],
       ),
     );
   }

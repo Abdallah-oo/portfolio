@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/core/constants/app_strings.dart';
+import 'package:portfolio/core/extensions/responsive.dart';
 import 'package:portfolio/core/themes/app_colors.dart';
 import 'package:portfolio/core/themes/app_text_styles.dart';
+import 'package:portfolio/core/widgets/custom_text.dart';
 import 'package:portfolio/features/home/presentation/views/widgets/section_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
-
-
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -22,7 +21,7 @@ class _ContactSectionState extends State<ContactSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width > 768;
+    final isWide = context.isDesktop;
 
     return VisibilityDetector(
       key: const Key('contact'),
@@ -33,10 +32,7 @@ class _ContactSectionState extends State<ContactSection> {
       },
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(
-          horizontal: isWide ? 64 : 24,
-          vertical: 80,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: isWide ? 64 : 24, vertical: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,7 +42,7 @@ class _ContactSectionState extends State<ContactSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SectionHeader( title: "Let's Talk"),
+                  SectionHeader(title: "Let's Talk"),
                   const SizedBox(height: 16),
                   Text(
                     "I'm open to Junior Flutter roles and exciting projects. "
@@ -61,24 +57,20 @@ class _ContactSectionState extends State<ContactSection> {
               opacity: _visible ? 1 : 0,
               duration: const Duration(milliseconds: 700),
               child: isWide
-                  ?  GridView.builder(
-
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 4,
-              ),
-              itemCount: _contactItems.length,
-              itemBuilder: (context,int index){
-                return _ContactCard(item: _contactItems[index]);
-              }
-            )
-
-
-
+                  ? GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 5,
+                      ),
+                      itemCount: _contactItems.length,
+                      itemBuilder: (context, int index) {
+                        return _ContactCard(item: _contactItems[index]);
+                      },
+                    )
                   : Column(
                       children: _contactItems
                           .map(
@@ -149,13 +141,10 @@ class _ContactCardState extends State<_ContactCard> {
             color: _hovered ? AppColors.bgTertiary : AppColors.bgSecondary,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: _hovered
-                  ? AppColors.accent.withOpacity(0.5)
-                  : AppColors.border,
+              color: _hovered ? AppColors.accent.withOpacity(0.5) : AppColors.border,
             ),
           ),
           child: Row(
-
             children: [
               Container(
                 width: 42,
@@ -165,33 +154,32 @@ class _ContactCardState extends State<_ContactCard> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
-                  child: FaIcon(
-                    widget.item['icon']! ,
-                    color: AppColors.accent,
-                    size: 18,
-                  ),
+                  child: FaIcon(widget.item['icon']!, color: AppColors.accent, ),
                 ),
               ),
               const SizedBox(width: 14),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(widget.item['label'] as String,
-                      style: AppTextStyles.skillCategory),
-                  const SizedBox(height: 3),
-                  Text(
-                    widget.item['value'] as String,
-                    style: AppTextStyles.cardBody.copyWith(fontSize: 13),
-                  ),
-                ],
+              // ✅ التعديل: لف الـ Column بـ Expanded عشان يمنع الـ overflow
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(text:widget.item['label'] as String, style: AppTextStyles.skillCategory),
+                    const SizedBox(height: 3),
+                    CustomText(
+                     text: widget.item['value'] as String,
+                      style: AppTextStyles.cardBody.copyWith(fontSize: 13),
+
+                    ),
+                  ],
+                ),
               ),
-              const Spacer(),
-              Icon(Icons.arrow_forward_ios_rounded,
-                  color: _hovered
-                      ? AppColors.accent
-                      : AppColors.textTertiary,
-                  size: 14),
+              const SizedBox(width: 8), // ✅ مسافة أمان قبل السهم
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: _hovered ? AppColors.accent : AppColors.textTertiary,
+                size: 14,
+              ),
             ],
           ),
         ),
@@ -216,8 +204,7 @@ class FooterWidget extends StatelessWidget {
       child: Center(
         child: Text(
           '© 2026 All rights reserved by Abdallah Ahmed',
-          style: AppTextStyles.cardBody
-              .copyWith(fontSize: 13, color: AppColors.textTertiary),
+          style: AppTextStyles.cardBody.copyWith(fontSize: 13, color: AppColors.textTertiary),
         ),
       ),
     );

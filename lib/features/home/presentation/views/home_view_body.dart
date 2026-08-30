@@ -17,11 +17,33 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   final ScrollController _scrollController = ScrollController();
   final List<GlobalKey> _sectionKeys = List.generate(5, (_) => GlobalKey());
   int _activeIndex = 0;
+  double _lastCheckedOffset = 0; // ✅ إضافة جديدة
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_updateActiveIndex);
+    _scrollController.addListener(_onScroll); // ✅ اتغيرت من _updateActiveIndex لـ _onScroll
+  }
+
+  void _onScroll() {
+    // ✅ دالة جديدة
+    final offset = _scrollController.offset;
+    // بنحسب بس لو الفرق أكتر من 24 بكسل، مش كل بكسل
+    if ((offset - _lastCheckedOffset).abs() < 24) return;
+    _lastCheckedOffset = offset;
+    _updateActiveIndex();
+  }
+
+  void _scrollToSection(int index) {
+    final ctx = _sectionKeys[index].currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+    setState(() => _activeIndex = index);
   }
 
   void _updateActiveIndex() {
@@ -43,21 +65,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     }
   }
 
-  void _scrollToSection(int index) {
-    final ctx = _sectionKeys[index].currentContext;
-    if (ctx != null) {
-      Scrollable.ensureVisible(
-        ctx,
-        duration: const Duration(milliseconds: 700),
-        curve: Curves.easeInOutCubic,
-      );
-    }
-    setState(() => _activeIndex = index);
-  }
-
   @override
   void dispose() {
-    _scrollController.removeListener(_updateActiveIndex);
+    _scrollController.removeListener(_onScroll); // ✅ اتغيرت هنا كمان
     _scrollController.dispose();
     super.dispose();
   }
@@ -75,13 +85,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 key: _sectionKeys[0],
                 child: HeroSection(onViewProjects: () => _scrollToSection(1)),
               ),
-                KeyedSubtree(
-                key: _sectionKeys[1],
-                child: const ProjectsSection(),
-              ),
+              KeyedSubtree(key: _sectionKeys[1], child: const ProjectsSection()),
               KeyedSubtree(key: _sectionKeys[2], child: const AboutSection()),
               KeyedSubtree(key: _sectionKeys[3], child: const SkillsSection()),
-            
+
               KeyedSubtree(key: _sectionKeys[4], child: const ContactSection()),
               const FooterWidget(),
             ],
@@ -94,6 +101,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           child: NavbarWidget(
             sectionKeys: _sectionKeys,
             activeIndex: _activeIndex,
+            scrollController: _scrollController, // ✅ إضافة جديدة
           ),
         ),
       ],
