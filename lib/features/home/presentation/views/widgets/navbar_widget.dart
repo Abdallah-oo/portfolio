@@ -94,7 +94,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
             ),
           ),
           child: AnimatedContainer(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: EdgeInsets.symmetric(vertical:isWide? 5:0),
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
 

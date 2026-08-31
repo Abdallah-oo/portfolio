@@ -20,50 +20,62 @@ class _SkillsSectionState extends State<SkillsSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = context.screenWidth > 768;
+    final isDesktop = context.isDesktop;
+    final isTablet = context.isTablet;
+
+    // ✅ عدد أعمدة يتدرج بدل قفزة واحدة من عمود لـ 3 أعمدة
+    final crossAxisCount = isDesktop ? 3 : (isTablet ? 2 : 1);
 
     return VisibilityDetector(
       key: const Key('skills'),
       onVisibilityChanged: (info) {
-        if (info.visibleFraction > 0.2 && !_visible) {
+        if (info.visibleFraction > 0.15 && !_visible) {
           setState(() => _visible = true);
         }
       },
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: isWide ? 64 : 24, vertical: 80),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SectionHeader(title: 'Tech Stack'),
-            const SizedBox(height: 48),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              // ✅ التعديل: استخدمنا crossAxisCount بدل maxCrossAxisExtent: double.infinity
-              gridDelegate: isWide
-                  ? SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 340,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 1,
-                    )
-                  : const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 2.5,
-                    ),
-              itemCount: AppStrings.skillCategories.length,
-              itemBuilder: (_, i) =>
-                  _SkillCard(data: AppStrings.skillCategories[i], index: i, visible: _visible),
+        padding: EdgeInsets.symmetric(
+          horizontal: isDesktop ? 64 : 24,
+          vertical: isDesktop ? 100 : 64,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SectionHeader(title: 'Tech Stack'),
+                const SizedBox(height: 12),
+                Text(
+                  'The tools and technologies I use to bring ideas to life.',
+                  style: AppTextStyles.heroSummary.copyWith(fontSize: 15),
+                ),
+                const SizedBox(height: 48),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  // ✅ crossAxisCount ثابت ومضبوط، مفيش infinity خالص
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: crossAxisCount == 1 ? 2.2 : 1.35,
+                  ),
+                  itemCount: AppStrings.skillCategories.length,
+                  itemBuilder: (_, i) =>
+                      _SkillCard(data: AppStrings.skillCategories[i], index: i, visible: _visible),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
+// ── كارت تصنيف واحد ──────────────────────────────────────────────────────
 
 class _SkillCard extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -85,54 +97,90 @@ class _SkillCardState extends State<_SkillCard> {
 
     return AnimatedOpacity(
       opacity: widget.visible ? 1 : 0,
-      duration: Duration(milliseconds: 500 + widget.index * 100),
+      duration: Duration(milliseconds: 450 + widget.index * 90),
       child: AnimatedSlide(
-        offset: widget.visible ? Offset.zero : const Offset(0, 0.15),
-        duration: Duration(milliseconds: 500 + widget.index * 100),
+        offset: widget.visible ? Offset.zero : const Offset(0, 0.12),
+        duration: Duration(milliseconds: 450 + widget.index * 90),
         curve: Curves.easeOutCubic,
         child: MouseRegion(
           onEnter: (_) => setState(() => _hovered = true),
           onExit: (_) => setState(() => _hovered = false),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.all(20),
+            duration: const Duration(milliseconds: 220),
+            padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
               color: _hovered ? AppColors.bgTertiary : AppColors.bgSecondary,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: _hovered ? AppColors.accent.withOpacity(0.5) : AppColors.border,
               ),
+              boxShadow: _hovered
+                  ? [
+                      BoxShadow(
+                        color: AppColors.accent.withOpacity(0.12),
+                        blurRadius: 30,
+                        offset: const Offset(0, 10),
+                      ),
+                    ]
+                  : [],
             ),
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
+                // ── الأيقونة في دايرة ملونة + العنوان ──────
                 Row(
                   children: [
-                    CustomText(
-                      text: widget.data['icon'] as String,
-                      style: const TextStyle(fontSize: 18),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: _hovered ? AppColors.accentGlow : AppColors.bgTertiary,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _hovered ? AppColors.accent.withOpacity(0.4) : AppColors.border,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.data['icon'] as String,
+                          style: const TextStyle(fontSize: 19),
+                        ),
+                      ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: CustomText(
                         text: widget.data['category'] as String,
-                        style: AppTextStyles.skillCategory.copyWith(
-                          color: _hovered ? AppColors.accentLight : AppColors.textSecondary,
+                        style: AppTextStyles.cardTitle.copyWith(
+                          fontSize: 15.5,
+                          color: _hovered ? AppColors.accentLight : AppColors.textPrimary,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 25),
-                SingleChildScrollView(
-                  child: Wrap(
-                    clipBehavior: Clip.none,
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: skills.map((s) => TechPill(label: s)).toList(),
+
+                const SizedBox(height: 14),
+
+                // ── خط فاصل رفيع بتدرج لوني ────────────────
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  width: _hovered ? 40 : 24,
+                  height: 2.5,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.accentGradient,
+                    borderRadius: BorderRadius.circular(2),
                   ),
+                ),
+
+                const SizedBox(height: 18),
+
+                // ── قائمة المهارات ─────────────────────────
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: skills.map((s) => TechPill(label: s)).toList(),
                 ),
               ],
             ),
@@ -142,7 +190,3 @@ class _SkillCardState extends State<_SkillCard> {
     );
   }
 }
-
-
-// ── Shared Section Header ─────────────────────────────────────────────────────
-
