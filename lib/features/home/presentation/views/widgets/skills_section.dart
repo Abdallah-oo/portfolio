@@ -21,10 +21,6 @@ class _SkillsSectionState extends State<SkillsSection> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = context.isDesktop;
-    final isTablet = context.isTablet;
-
-    // ✅ عدد أعمدة يتدرج بدل قفزة واحدة من عمود لـ 3 أعمدة
-    final crossAxisCount = isDesktop ? 3 : (isTablet ? 2 : 1);
 
     return VisibilityDetector(
       key: const Key('skills'),
@@ -52,19 +48,65 @@ class _SkillsSectionState extends State<SkillsSection> {
                   style: AppTextStyles.heroSummary.copyWith(fontSize: 15),
                 ),
                 const SizedBox(height: 48),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  // ✅ crossAxisCount ثابت ومضبوط، مفيش infinity خالص
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: crossAxisCount == 1 ? 2.2 : 1.35,
-                  ),
-                  itemCount: AppStrings.skillCategories.length,
-                  itemBuilder: (_, i) =>
-                      _SkillCard(data: AppStrings.skillCategories[i], index: i, visible: _visible),
+
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    const spacing = 20.0;
+                    final columns = constraints.maxWidth >= 900
+                        ? 3
+                        : (constraints.maxWidth >= 560 ? 2 : 1);
+
+                    // ✅ التعديل الأساسي: نقسّم القائمة لصفوف بحجم "columns"
+                    final categories = AppStrings.skillCategories;
+                    final rows = <List<Map<String, dynamic>>>[];
+                    for (var i = 0; i < categories.length; i += columns) {
+                      rows.add(
+                        categories.sublist(
+                          i,
+                          (i + columns > categories.length) ? categories.length : i + columns,
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      children: List.generate(rows.length, (rowIndex) {
+                        final rowItems = rows[rowIndex];
+
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: rowIndex == rows.length - 1 ? 0 : spacing,
+                          ),
+                          // ✅ IntrinsicHeight: يحسب أطول كارت في الصف ده بس
+                          child: IntrinsicHeight(
+                            child: Row(
+                              // ✅ stretch: كل الكروت في الصف تاخد نفس الارتفاع (الأطول)
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                for (var i = 0; i < rowItems.length; i++) ...[
+                                  if (i != 0) const SizedBox(width: spacing),
+                                  Expanded(
+                                    child: _SkillCard(
+                                      data: rowItems[i],
+                                      index: rowIndex * columns + i,
+                                      visible: _visible,
+                                    ),
+                                  ),
+                                ],
+                                // ✅ لو آخر صف ناقص كروت (عدد التصنيفات مش مضبوط
+                                // على عدد الأعمدة)، نملى الفراغ بمساحة فاضية
+                                // عشان الكروت الموجودة متتمددش وتاخد عرض غلط
+                                if (rowItems.length < columns)
+                                  for (var i = 0; i < columns - rowItems.length; i++) ...[
+                                    const SizedBox(width: spacing),
+                                    const Expanded(child: SizedBox()),
+                                  ],
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    );
+                  },
                 ),
               ],
             ),
@@ -107,6 +149,8 @@ class _SkillCardState extends State<_SkillCard> {
           onExit: (_) => setState(() => _hovered = false),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 220),
+            // ✅ مفيش height ثابت هنا؛ الـ IntrinsicHeight فوق هو اللي بيتحكم
+            width: double.infinity,
             padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
               color: _hovered ? AppColors.bgTertiary : AppColors.bgSecondary,
@@ -150,8 +194,11 @@ class _SkillCardState extends State<_SkillCard> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: CustomText(
-                        text: widget.data['category'] as String,
+                      child: Text(
+                        widget.data['category'] as String,
+                        maxLines: 1,
+                        overflow: TextOverflow
+                            .ellipsis, // ✅ لو الاسم طويل جدًا يتقص بـ "..." بدل ما يكسر التصميم
                         style: AppTextStyles.cardTitle.copyWith(
                           fontSize: 15.5,
                           color: _hovered ? AppColors.accentLight : AppColors.textPrimary,
@@ -182,6 +229,8 @@ class _SkillCardState extends State<_SkillCard> {
                   runSpacing: 8,
                   children: skills.map((s) => TechPill(label: s)).toList(),
                 ),
+
+                const Spacer(),
               ],
             ),
           ),

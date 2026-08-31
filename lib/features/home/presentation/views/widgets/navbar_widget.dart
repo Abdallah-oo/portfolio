@@ -60,22 +60,24 @@ class _NavbarWidgetState extends State<NavbarWidget> {
 @override
   Widget build(BuildContext context) {
     final isWide = context.isDesktop;
+    final isMobile = context.isMobile;
+
 
     // ✅ التعديل: لو مش scrolled، من غير BackdropFilter خالص
     if (!_scrolled) {
-      return _buildNavContent(context, isWide);
+      return _buildNavContent(context, isWide,isMobile);
     }
 
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-        child: _buildNavContent(context, isWide),
+        child: _buildNavContent(context, isWide,isMobile),
       ),
     );
   }
 
   // ✅ استخرجنا محتوى الـ navbar لدالة منفصلة عشان نستخدمها في الحالتين
-  Widget _buildNavContent(BuildContext context, bool isWide) {
+  Widget _buildNavContent(BuildContext context, bool isWide,bool isMobile) {
     return Container(
 
 
@@ -94,7 +96,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
             ),
           ),
           child: AnimatedContainer(
-            padding: EdgeInsets.symmetric(vertical:isWide? 5:0),
+
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
 
@@ -107,7 +109,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                   : [],
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: isWide ? 64 : 20, vertical: 16),
+              padding: EdgeInsets.symmetric(horizontal: isWide ? 65 : 20, vertical: isMobile ? 5:16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
