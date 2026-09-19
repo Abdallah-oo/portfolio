@@ -320,7 +320,7 @@ class _RightProfile extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(color: AppColors.border, width: 1),
                       image: const DecorationImage(
-                        image: AssetImage('assets/images/profile/profile.jpg'),
+                        image: AssetImage('assets/images/profile/profile.webp'),
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -42,7 +42,7 @@ class AppStrings {
       'title': 'Chattr',
       'subtitle': 'Real-Time Chat Application',
       'year': '2026',
-      'image': 'assets/images/projects_covers/Chat.jpg',
+      'image': 'assets/images/projects_covers/Chat.webp',
       'youtubeUrl': 'https://youtu.be/OTLd1MyU0y8',
       'githubUrl': 'https://github.com/Abdallah-oo/Chattr',
       'description':
@@ -63,7 +63,7 @@ class AppStrings {
       'title': 'Hungry Time',
       'subtitle': 'Food Delivery App',
       'year': '2026',
-      'image': 'assets/images/projects_covers/Hungry.jpg',
+      'image': 'assets/images/projects_covers/Hungry.webp',
       'youtubeUrl': 'https://youtu.be/ZyhmN2Mzk8k',
       'githubUrl': 'https://github.com/Abdallah-oo/hungry_time',
       'description':
@@ -83,7 +83,7 @@ class AppStrings {
       'title': 'Sooq',
       'subtitle': 'Grocery Shopping App',
       'year': '2025',
-      'image': 'assets/images/projects_covers/Sooq.jpg',
+      'image': 'assets/images/projects_covers/Sooq.webp',
       'youtubeUrl': 'https://youtu.be/cgoHK1NfNtM',
       'githubUrl': 'https://github.com/Abdallah-oo/sooq',
       'description':
@@ -103,7 +103,7 @@ class AppStrings {
       'title': 'ToneDust',
       'subtitle': 'Music Player App',
       'year': '2025',
-      'image': 'assets/images/projects_covers/ToneDust.jpg',
+      'image': 'assets/images/projects_covers/ToneDust.webp',
       'youtubeUrl': 'https://youtube.com/shorts/1zVvhi8nO0g?feature=share',
       'githubUrl': 'https://github.com/Abdallah-oo/music_app',
       'description':
@@ -123,7 +123,7 @@ class AppStrings {
       'title': 'Cafe App',
       'subtitle': 'Flutter Drink Ordering App',
       'year': '2025',
-      'image': 'assets/images/projects_covers/CafeApp.jpg',
+      'image': 'assets/images/projects_covers/CafeApp.webp',
       'youtubeUrl': 'https://youtube.com/shorts/TjaAW1uiXGE?feature=share',
       'githubUrl': 'https://github.com/Abdallah-oo/cafe_app',
       'description':
@@ -144,7 +144,7 @@ class AppStrings {
       'title': 'Runway',
       'subtitle': 'Fashion E-Commerce App',
       'year': '2025',
-      'image': 'assets/images/projects_covers/Runway.jpg',
+      'image': 'assets/images/projects_covers/Runway.webp',
       'youtubeUrl': 'https://youtube.com/shorts/j9Pl-9rG5GE?feature=share',
       'githubUrl': 'https://github.com/Abdallah-oo/Runway',
       'description':
@@ -165,7 +165,7 @@ class AppStrings {
       'title': 'Fashion App',
       'subtitle': 'Full-Featured Fashion E-Commerce',
       'year': '2025',
-      'image': 'assets/images/projects_covers/Fashion.jpg',
+      'image': 'assets/images/projects_covers/Fashion.webp',
       'youtubeUrl': 'https://youtube.com/shorts/KuQkPCRzgSc?feature=share',
       'githubUrl': 'https://github.com/Abdallah-oo/fashion_app',
       'description':
