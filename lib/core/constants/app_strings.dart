@@ -46,17 +46,17 @@ class AppStrings {
       'youtubeUrl': 'https://youtu.be/OTLd1MyU0y8',
       'githubUrl': 'https://github.com/Abdallah-oo/Chattr',
       'description':
-          'Feature-First Clean Architecture chat app with live private & group '
-          'messaging powered by Supabase Realtime. Supports voice messages, '
-          'image sharing, offline caching (Hive), pagination, and role-based '
-          'group management with optimistic UI updates.',
-      'tech': ['Flutter', 'Supabase', 'BLoC/Cubit', 'Hive', 'Clean Arch'],
+          'Real-time chat app built with MVVM and Supabase, featuring '
+          'optimistic messaging, voice notes, push notifications, '
+          'and offline caching with background synchronization.',
+      'tech': ['Flutter', 'Supabase', 'MVVM', 'Cubit', 'Hive', 'Firebase FCM'],
       'highlights': [
-        'Real-time messaging with Supabase Realtime',
-        'Offline-first with Hive caching',
-        'Voice messages & image sharing',
-        'Role-based group management',
+        'Real-time private & group messaging with optimistic UI',
+        'Push notifications with deep linking and smart routing',
+        'Voice messages with background uploads and local caching',
+        'Live presence and offline-first data synchronization',
       ],
+
     },
     {
       'number': '02',
@@ -67,15 +67,15 @@ class AppStrings {
       'youtubeUrl': 'https://youtu.be/ZyhmN2Mzk8k',
       'githubUrl': 'https://github.com/Abdallah-oo/hungry_time',
       'description':
-          'End-to-end food ordering experience built with Clean Architecture '
-          'and a reusable Dio-based API layer with JWT auth, interceptors, '
-          'and centralized error handling.',
-      'tech': ['Flutter', 'REST APIs', 'Dio', 'BLoC/Cubit', 'JWT'],
+          'Food delivery app built with MVVM, featuring a reusable Dio '
+          'API layer, JWT authentication, product browsing, cart '
+          'management, and a complete checkout and order flow.',
+      'tech': ['Flutter', 'Dart', 'MVVM', 'BLoC/Cubit', 'Dio', 'JWT'],
       'highlights': [
-        'Dio API layer with JWT & interceptors',
-        'Guest checkout & payment flow',
-        'Meal customization & cart management',
-        'Real-time order tracking',
+        'Reusable Dio API layer with JWT authentication and interceptors',
+        'Product browsing, search, and category filtering',
+        'Cart management, guest checkout, and payment flow',
+        'Order tracking and centralized API error handling',
       ],
     },
     {
@@ -84,22 +84,43 @@ class AppStrings {
       'subtitle': 'Grocery Shopping App',
       'year': '2025',
       'image': 'assets/images/projects_covers/Sooq.webp',
-      'youtubeUrl': 'https://youtu.be/cgoHK1NfNtM',
+      'youtubeUrl': 'https://youtu.be/mi5IiFXnmpM',
       'githubUrl': 'https://github.com/Abdallah-oo/sooq',
-      'description':
-          'Grocery shopping app with Clean Architecture, global BLoC state '
-          'for cart & favorites, live search, category filtering, promo codes, '
-          'image cropping, skeleton loading, and smooth page transitions.',
-      'tech': ['Flutter', 'Supabase', 'BLoC/Cubit', 'Clean Arch'],
+'description':
+          'Grocery shopping app built with Clean Architecture and Supabase, '
+          'featuring a normalized PostgreSQL database, reusable pagination, '
+          'offline-first caching, and advanced server-side search.',
+      'tech': ['Flutter', 'Dart', 'Clean Architecture', 'BLoC/Cubit', 'Supabase', 'Hive'],
       'highlights': [
-        'Live search & category filtering',
-        'Global BLoC cart & favorites',
-        'Promo codes & image cropping',
-        'Skeleton loading & smooth transitions',
+        'PostgreSQL schema with Row-Level Security and 170+ seeded products',
+        'Reusable paginated product fetching across multiple screens',
+        'Offline-first caching with silent background refresh',
+        'Debounced server-side search with sorting and race-condition handling',
       ],
     },
     {
       'number': '04',
+      'title': 'Bookly',
+      'subtitle': 'Book Discovery App',
+      'year': '2025',
+      'image': 'assets/images/projects_covers/Bookly.webp',
+      'youtubeUrl': 'https://www.youtube.com/watch?v=WUHwXAAGYQI',
+      'githubUrl': 'https://github.com/Abdallah-oo/bookly',
+      'description':
+          'Book discovery app built with Clean Architecture, featuring '
+          'Google Books API integration, paginated browsing, and Hive '
+          'caching for offline access.',
+      'tech': ['Flutter', 'Dart', 'Clean Architecture', 'Cubit', 'Hive'],
+      'highlights': [
+        'Clean Architecture with Domain, Data & Presentation layers',
+        'Paginated book browsing with duplicate-request prevention',
+        'Cache-first data loading with Hive and Dio',
+        'Reusable use cases and functional error handling',
+      ],
+    },
+
+    {
+      'number': '05',
       'title': 'ToneDust',
       'subtitle': 'Music Player App',
       'year': '2025',
@@ -119,7 +140,7 @@ class AppStrings {
       ],
     },
     {
-      'number': '05',
+      'number': '06',
       'title': 'Cafe App',
       'subtitle': 'Flutter Drink Ordering App',
       'year': '2025',
@@ -140,7 +161,7 @@ class AppStrings {
       ],
     },
     {
-      'number': '06',
+      'number': '07',
       'title': 'Runway',
       'subtitle': 'Fashion E-Commerce App',
       'year': '2025',
@@ -161,7 +182,7 @@ class AppStrings {
       ],
     },
     {
-      'number': '07',
+      'number': '08',
       'title': 'Fashion App',
       'subtitle': 'Full-Featured Fashion E-Commerce',
       'year': '2025',
