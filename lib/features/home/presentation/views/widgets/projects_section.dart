@@ -77,7 +77,7 @@ class _ProjectStripState extends State<_ProjectStrip> {
     final isEven = widget.index.isEven;
     final bgColor = isEven ? AppColors.bgPrimary : AppColors.bgSecondary;
 
-    final imageBlock = _ProjectImage(project: widget.project, hovered: _hovered);
+    final imageBlock = _ProjectImage(project: widget.project, hovered: _hovered, isDesktop: isDesktop);
 
     final contentBlock = _ProjectContent(project: widget.project, index: widget.index);
 
@@ -131,36 +131,39 @@ class _ProjectStripState extends State<_ProjectStrip> {
 class _ProjectImage extends StatelessWidget {
   final Map<String, dynamic> project;
   final bool hovered;
+  final bool isDesktop;
 
-  const _ProjectImage({required this.project, required this.hovered});
+  const _ProjectImage({required this.project, required this.hovered, required this.isDesktop});
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+    return SizedBox(
+      height:isDesktop? 300:260,
       child: AspectRatio(
-        aspectRatio: 4 / 3,
+        aspectRatio:5/2,
         child: Stack(
-          fit: StackFit.expand,
           children: [
-            AnimatedScale(
-              scale: hovered ? 1.05 : 1.0,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeOutCubic,
-              child: Image.asset(
-                project['image'] as String,
-                fit: BoxFit.fill,
-                cacheWidth: 900,
-                errorBuilder: (_, _, _) => Container(
-                  color: AppColors.bgTertiary,
-                  child: Center(
-                    child: Text(
-                      project['number'] as String,
-                      style: TextStyle(
-                        fontSize: 72,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.accent.withOpacity(0.15),
-                        fontFamily: 'FiraCode',
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: AnimatedScale(
+                scale: hovered ? 1.05 : 1.0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOutCubic,
+                child: Image.asset(
+                  project['image'] as String,
+
+                  cacheWidth: 900,
+                  errorBuilder: (_, _, _) => Container(
+                    color: AppColors.bgTertiary,
+                    child: Center(
+                      child: Text(
+                        project['number'] as String,
+                        style: TextStyle(
+                          fontSize: 72,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.accent.withOpacity(0.15),
+                          fontFamily: 'FiraCode',
+                        ),
                       ),
                     ),
                   ),
@@ -181,7 +184,7 @@ class _ProjectImage extends StatelessWidget {
             ),
 
             // سنة المشروع — أعلى الصورة
-            Positioned(top: 18, left: 18, child: _GlassBadge(text: project['year'] as String)),
+            Positioned(top: 10, left: 18, child: _GlassBadge(text: project['year'] as String)),
           ],
         ),
       ),
