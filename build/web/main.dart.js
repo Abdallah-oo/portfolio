@@ -69241,7 +69241,7 @@ $1(a){return new A.jg(a,null)},
 $S:171}
 A.FQ.prototype={
 J(a){var s=null
-return new A.ve(B.Bj,"Abdallah Ahmed \u2014 Flutter Developer",A.a5c(B.ah,B.zh,B.eD,A.a5c(B.ah,s,s,s,s).ok.a4j("Inter"),!0),!1,s)}}
+return new A.ve(B.Bj,"Abdallah Ahmed \u2014 Mobile Developer",A.a5c(B.ah,B.zh,B.eD,A.a5c(B.ah,s,s,s,s).ok.a4j("Inter"),!0),!1,s)}}
 A.p2.prototype={
 H(){return"LaunchMode."+this.b}}
 A.a5Z.prototype={}
