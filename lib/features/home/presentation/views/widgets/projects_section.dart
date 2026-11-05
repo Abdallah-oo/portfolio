@@ -79,7 +79,6 @@ class _ProjectStripState extends State<_ProjectStrip> {
     final isDesktop = context.isDesktop;
     final isEven = widget.index.isEven;
     final bgColor = isEven ? AppColors.bgPrimary : AppColors.bgSecondary;
-    print(context.screenWidth);
     final imageBlock = _ProjectImage(
       project: widget.project,
       hovered: _hovered,
@@ -149,7 +148,7 @@ class _ProjectImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: isDesktop ? 300 : 260,
+      height: isDesktop ? 300 : context.screenWidth * 0.5,
       child: AspectRatio(
         aspectRatio: 5 / 2,
         child: Stack(
