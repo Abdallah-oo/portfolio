@@ -32,7 +32,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         children: [
           // ── Section intro (مقيّد بعرض الصفحة العادي) ──────────
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: context.isDesktop ? 64 : 24, vertical: 80),
+            padding: EdgeInsets.symmetric(horizontal: context.isDesktop ? 64 : 24, vertical: context.isDesktop ? 80 : 20),
             child: Align(
               alignment: Alignment.centerLeft,
               child: AnimatedOpacity(
@@ -116,7 +116,7 @@ class _ProjectStripState extends State<_ProjectStrip> {
                     )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [imageBlock, const SizedBox(height: 28), contentBlock],
+                      children: [imageBlock,  SizedBox(height: isDesktop?28:context.screenHeight*0.09), contentBlock],
                     ),
             ),
           ),
