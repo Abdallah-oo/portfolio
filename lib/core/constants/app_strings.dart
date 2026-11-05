@@ -11,7 +11,7 @@ class AppStrings {
   static const String githubUrl = 'https://github.com/Abdallah-oo';
   static const String linkedinUrl = 'https://www.linkedin.com/in/abdallah-oo/';
   static const String cvLink =
-      'https://drive.google.com/drive/folders/1VmPaF4XjhP-nrpnegGMP-ZudC14UAtFV?hl=ar';
+      'https://drive.google.com/file/d/1GQ3m8Ggy7waH2DNUI9mOnP0M8tCgxsff/view?usp=sharing';
 
   static const String summary =
       'Flutter Developer with 1+ year of experience building '
