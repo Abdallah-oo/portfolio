@@ -32,7 +32,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         children: [
           // ── Section intro (مقيّد بعرض الصفحة العادي) ──────────
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: context.isDesktop ? 64 : 24, vertical: context.isDesktop ? 80 : 20),
+            padding: EdgeInsets.symmetric(
+              horizontal: context.isDesktop ? 64 : 24,
+              vertical: context.isDesktop ? 80 : 20,
+            ),
             child: Align(
               alignment: Alignment.centerLeft,
               child: AnimatedOpacity(
@@ -76,8 +79,12 @@ class _ProjectStripState extends State<_ProjectStrip> {
     final isDesktop = context.isDesktop;
     final isEven = widget.index.isEven;
     final bgColor = isEven ? AppColors.bgPrimary : AppColors.bgSecondary;
-
-    final imageBlock = _ProjectImage(project: widget.project, hovered: _hovered, isDesktop: isDesktop);
+    print(context.screenWidth);
+    final imageBlock = _ProjectImage(
+      project: widget.project,
+      hovered: _hovered,
+      isDesktop: isDesktop,
+    );
 
     final contentBlock = _ProjectContent(project: widget.project, index: widget.index);
 
@@ -116,7 +123,11 @@ class _ProjectStripState extends State<_ProjectStrip> {
                     )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [imageBlock,  SizedBox(height: isDesktop?28:context.screenHeight*0.09), contentBlock],
+                      children: [
+                        imageBlock,
+                        SizedBox(height: isDesktop ? 28 : context.screenWidth * 0.09),
+                        contentBlock,
+                      ],
                     ),
             ),
           ),
@@ -138,9 +149,9 @@ class _ProjectImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height:isDesktop? 300:260,
+      height: isDesktop ? 300 : 260,
       child: AspectRatio(
-        aspectRatio:5/2,
+        aspectRatio: 5 / 2,
         child: Stack(
           children: [
             ClipRRect(
