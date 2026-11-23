@@ -5,6 +5,7 @@
   <base href="$FLUTTER_BASE_HREF" />
 
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
 
   <!-- SEO -->
@@ -50,24 +51,30 @@
     body {
       margin: 0;
       padding: 0;
-      height: 100%;
       width: 100%;
-      background-color: #050506;
+      min-height: 100%;
+      background: #07080d;
     }
 
     #loading {
       position: fixed;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      width: 100vw;
-      background: #050506;
       z-index: 9999;
-      opacity: 1;
-      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      box-sizing: border-box;
+      padding: clamp(22px, 5vw, 72px);
       overflow: hidden;
+      isolation: isolate;
+      opacity: 1;
+      background:
+        radial-gradient(ellipse at 75% 48%, rgba(99, 87, 230, .17), transparent 34%),
+        radial-gradient(ellipse at 14% 86%, rgba(29, 145, 157, .10), transparent 30%),
+        #07080d;
+      transition: opacity .7s cubic-bezier(.22, 1, .36, 1);
     }
 
     #loading.fade-out {
@@ -75,143 +82,312 @@
       pointer-events: none;
     }
 
-    .orb {
+    #loading::before {
+      content: "";
       position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.35;
-      will-change: transform;
+      inset: 0;
+      z-index: -2;
+      opacity: .18;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: radial-gradient(ellipse at center, black, transparent 78%);
     }
 
-    .orb-1 {
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, #6c63ff, transparent 70%);
-      top: -120px;
-      left: -100px;
-      animation: float1 14s ease-in-out infinite;
-    }
-
-    .orb-2 {
-      width: 380px;
-      height: 380px;
-      background: radial-gradient(circle, #ff6ec7, transparent 70%);
-      bottom: -140px;
-      right: -80px;
-      animation: float2 16s ease-in-out infinite;
-    }
-
-    @keyframes float1 {
-
-      0%,
-      100% {
-        transform: translate(0, 0);
-      }
-
-      50% {
-        transform: translate(60px, 40px);
-      }
-    }
-
-    @keyframes float2 {
-
-      0%,
-      100% {
-        transform: translate(0, 0);
-      }
-
-      50% {
-        transform: translate(-50px, -30px);
-      }
-    }
-
-    #grain {
+    #loading::after {
+      content: "";
       position: absolute;
-      inset: -50%;
-      width: 200%;
-      height: 200%;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      inset: 18px;
+      z-index: -1;
+      border: 1px solid rgba(255, 255, 255, .055);
+      border-radius: 18px;
       pointer-events: none;
     }
 
-    #loading-content {
-      position: relative;
-      display: flex;
-      flex-direction: column;
+    .loader-shell {
+      width: min(100%, 1160px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
       align-items: center;
-      gap: 32px;
-      animation: rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      gap: clamp(30px, 5.5vw, 82px);
+      animation: loader-arrive .75s cubic-bezier(.2, .8, .2, 1) both;
     }
 
-    #logo-svg {
-      width: 104px;
-      height: 42px;
-      overflow: visible;
-    }
-
-    #logo-svg path {
-      fill: none;
-      stroke: url(#logoGradient);
-      stroke-width: 6;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 220;
-      stroke-dashoffset: 220;
-      animation: draw 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards;
-    }
-
-    #loading-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    #loading-bar-container {
-      width: 200px;
-      height: 2px;
-      background-color: rgba(255, 255, 255, 0.08);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    #loading-bar {
-      height: 100%;
-      width: 0%;
-      border-radius: 2px;
-      background: linear-gradient(90deg, #6c63ff, #c4bdfd);
-      transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    #loading-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .loader-copy {
+      min-width: 0;
+      color: #f5f4ff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    #loading-percent {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      color: rgba(255, 255, 255, 0.55);
-      font-variant-numeric: tabular-nums;
-      min-width: 30px;
+    .loader-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 32px;
+      color: #aaa5df;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .loader-live-dot {
+      position: relative;
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: #8c83ff;
+      box-shadow: 0 0 14px rgba(140, 131, 255, .9);
+    }
+
+    .loader-live-dot::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border: 1px solid rgba(140, 131, 255, .55);
+      border-radius: 50%;
+      animation: live-pulse 1.8s ease-out infinite;
+    }
+
+    .loader-heading {
+      margin: 0;
+      max-width: 650px;
+      color: #f7f6ff;
+      font-size: clamp(42px, 5.4vw, 72px);
+      font-weight: 720;
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+
+    .loader-heading span {
+      display: block;
+      margin-top: 9px;
+      color: #9289ff;
+    }
+
+    .loader-intro {
+      max-width: 455px;
+      margin: 22px 0 34px;
+      color: rgba(231, 230, 247, .64);
+      font-size: 14px;
+      line-height: 1.8;
+      letter-spacing: .1px;
+    }
+
+    .loader-progress-block {
+      width: min(100%, 440px);
+      padding-top: 23px;
+      border-top: 1px solid rgba(255, 255, 255, .11);
+    }
+
+    .loader-progress-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 13px;
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
     }
 
     #loading-sub {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.28);
+      color: rgba(231, 230, 247, .72);
     }
 
-    @keyframes rise {
+    #loading-percent {
+      color: #c5c0ff;
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .4px;
+    }
+
+    #loading-bar-container {
+      position: relative;
+      width: 100%;
+      height: 4px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .1);
+    }
+
+    #loading-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7066ff 0%, #aaa3ff 62%, #72d5cf 100%);
+      box-shadow: 0 0 18px rgba(129, 117, 255, .7);
+      transition: width .25s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .loader-footnote {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 17px;
+      color: rgba(220, 219, 242, .38);
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: .15px;
+    }
+
+    .loader-footnote svg {
+      flex: 0 0 14px;
+      opacity: .7;
+    }
+
+    .loader-art {
+      position: relative;
+      display: grid;
+      place-items: center;
+      justify-self: center;
+      width: min(100%, 460px);
+      min-width: 0;
+      aspect-ratio: 1;
+    }
+
+    .loader-art::before,
+    .loader-art::after {
+      content: "";
+      position: absolute;
+      width: 82%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(163, 155, 255, .13);
+      border-radius: 50%;
+    }
+
+    .loader-art::before {
+      transform: rotate(-22deg) scaleX(.82);
+      border-style: dashed;
+      animation: orbit-spin 38s linear infinite;
+    }
+
+    .loader-art::after {
+      width: 68%;
+      border-color: rgba(255, 255, 255, .07);
+      box-shadow: 0 0 75px rgba(112, 100, 255, .09);
+    }
+
+    .loader-portrait-wrap {
+      position: relative;
+      z-index: 2;
+      width: 47%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 50%;
+      background: #171827;
+      box-shadow: 0 22px 80px rgba(0, 0, 0, .5), 0 0 55px rgba(119, 108, 255, .18);
+    }
+
+    .loader-portrait {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      filter: saturate(.78) contrast(1.06);
+    }
+
+    .loader-ring {
+      position: absolute;
+      z-index: 3;
+      width: 64%;
+      height: 64%;
+      overflow: visible;
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 8px rgba(135, 125, 255, .45));
+    }
+
+    .loader-ring circle {
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .loader-ring-track {
+      stroke: rgba(255, 255, 255, .11);
+    }
+
+    #loading-ring-progress {
+      stroke: url(#loaderRingGradient);
+      stroke-linecap: round;
+      stroke-dasharray: 678.6;
+      stroke-dashoffset: 678.6;
+      transition: stroke-dashoffset .25s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .loader-ring-center {
+      position: absolute;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      width: 19%;
+      aspect-ratio: 1;
+      right: 15%;
+      bottom: 17%;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 50%;
+      background: rgba(15, 15, 28, .9);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .35);
+      color: #c7c2ff;
+    }
+
+    .loader-ring-center svg {
+      width: 42%;
+      height: 42%;
+      animation: soft-spin 5s linear infinite;
+    }
+
+    .loader-float-card {
+      position: absolute;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(34, 34, 53, .88), rgba(17, 18, 29, .88));
+      box-shadow: 0 14px 38px rgba(0, 0, 0, .28);
+      color: rgba(245, 244, 255, .86);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.35px;
+      text-transform: uppercase;
+      backdrop-filter: blur(16px);
+    }
+
+    .loader-float-card svg {
+      width: 17px;
+      height: 17px;
+      color: #a59eff;
+    }
+
+    .loader-float-top {
+      top: 14%;
+      right: -1%;
+      animation: card-drift 5s ease-in-out infinite;
+    }
+
+    .loader-float-bottom {
+      bottom: 13%;
+      left: -3%;
+      animation: card-drift 5.8s ease-in-out -1.5s infinite;
+    }
+
+    .loader-float-bottom svg {
+      color: #79d1ca;
+    }
+
+    @keyframes loader-arrive {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(16px);
       }
 
       to {
@@ -220,9 +396,318 @@
       }
     }
 
-    @keyframes draw {
+    @keyframes live-pulse {
+      0% {
+        transform: scale(.65);
+        opacity: .9;
+      }
+
+      100% {
+        transform: scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    @keyframes orbit-spin {
       to {
-        stroke-dashoffset: 0;
+        transform: rotate(338deg) scaleX(.82);
+      }
+    }
+
+    @keyframes soft-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes card-drift {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    /* Tablet: tighter two-column composition with smaller type and artwork. */
+    @media (min-width: 701px) and (max-width: 1024px) {
+      #loading {
+        padding: clamp(24px, 4vw, 42px);
+      }
+
+      .loader-shell {
+        grid-template-columns: minmax(0, 1.08fr) minmax(245px, .82fr);
+        gap: clamp(18px, 3vw, 34px);
+      }
+
+      .loader-eyebrow {
+        margin-bottom: 23px;
+        font-size: 9px;
+        letter-spacing: 2.2px;
+      }
+
+      .loader-heading {
+        font-size: clamp(39px, 5.1vw, 56px);
+        letter-spacing: -.055em;
+      }
+
+      .loader-intro {
+        max-width: 390px;
+        margin: 17px 0 25px;
+        font-size: 13px;
+        line-height: 1.75;
+      }
+
+      .loader-progress-block {
+        padding-top: 18px;
+      }
+
+      .loader-art {
+        width: min(100%, 340px);
+      }
+
+      .loader-float-card {
+        gap: 8px;
+        padding: 10px 11px;
+        font-size: 8px;
+        letter-spacing: .8px;
+      }
+
+      .loader-float-card svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .loader-float-top {
+        right: -2%;
+        top: 14%;
+      }
+
+      .loader-float-bottom {
+        left: -2%;
+        bottom: 13%;
+      }
+    }
+
+    /* Phones: portrait-led layout, centered copy, and compact spacing. */
+    @media (max-width: 700px) {
+      #loading {
+        padding: max(22px, env(safe-area-inset-top)) 22px max(22px, env(safe-area-inset-bottom));
+      }
+
+      #loading::after {
+        inset: 8px;
+        border-radius: 13px;
+      }
+
+      .loader-shell {
+        width: min(100%, 500px);
+        grid-template-columns: minmax(0, 1fr);
+        gap: clamp(12px, 3vh, 22px);
+      }
+
+      .loader-art {
+        order: 1;
+        width: clamp(176px, 43vw, 238px);
+        justify-self: center;
+      }
+
+      .loader-copy {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .loader-eyebrow {
+        margin-bottom: 13px;
+        font-size: 9px;
+        letter-spacing: 2px;
+      }
+
+      .loader-heading {
+        max-width: 520px;
+        font-size: clamp(35px, 8.8vw, 49px);
+        line-height: 1.02;
+        letter-spacing: -.06em;
+      }
+
+      .loader-heading span {
+        margin-top: 5px;
+      }
+
+      .loader-intro {
+        max-width: 370px;
+        margin: 12px 0 19px;
+        font-size: 12px;
+        line-height: 1.65;
+      }
+
+      .loader-progress-block {
+        width: min(100%, 390px);
+        padding-top: 15px;
+      }
+
+      .loader-progress-heading {
+        margin-bottom: 10px;
+        font-size: 9px;
+      }
+
+      .loader-footnote {
+        justify-content: center;
+        margin-top: 11px;
+        font-size: 10px;
+      }
+
+      .loader-float-card {
+        gap: 7px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 7px;
+        letter-spacing: .7px;
+      }
+
+      .loader-float-card svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .loader-float-top {
+        right: -9%;
+        top: 13%;
+      }
+
+      .loader-float-bottom {
+        left: -9%;
+        bottom: 11%;
+      }
+    }
+
+    /* Very narrow phones. */
+    @media (max-width: 380px) {
+      #loading {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .loader-shell {
+        gap: 10px;
+      }
+
+      .loader-art {
+        width: 170px;
+      }
+
+      .loader-heading {
+        font-size: 34px;
+      }
+
+      .loader-intro {
+        margin: 10px 0 16px;
+        font-size: 11px;
+      }
+
+      .loader-float-card {
+        padding: 7px 8px;
+        font-size: 6.5px;
+      }
+
+      .loader-float-top {
+        right: -11%;
+      }
+
+      .loader-float-bottom {
+        left: -11%;
+      }
+    }
+
+    /* Short screens / landscape phones: keep the whole loader comfortably visible. */
+    @media (max-height: 620px) {
+      #loading {
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+
+      .loader-shell {
+        gap: 18px;
+      }
+
+      .loader-eyebrow {
+        margin-bottom: 12px;
+      }
+
+      .loader-intro {
+        margin-top: 12px;
+        margin-bottom: 18px;
+      }
+
+      .loader-art {
+        max-width: 270px;
+      }
+    }
+
+    @media (max-width: 700px) and (max-height: 620px) {
+      .loader-shell {
+        grid-template-columns: minmax(130px, .72fr) minmax(0, 1.28fr);
+        align-items: center;
+        gap: 14px;
+      }
+
+      .loader-art {
+        order: 1;
+        width: min(100%, 190px);
+      }
+
+      .loader-copy {
+        order: 2;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .loader-eyebrow {
+        font-size: 7px;
+        letter-spacing: 1.2px;
+      }
+
+      .loader-heading {
+        font-size: clamp(27px, 6vw, 38px);
+      }
+
+      .loader-intro {
+        font-size: 10px;
+        line-height: 1.5;
+      }
+
+      .loader-progress-heading {
+        font-size: 8px;
+      }
+
+      .loader-footnote {
+        justify-content: flex-start;
+        font-size: 8px;
+      }
+
+      .loader-float-card {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+
+      #loading-ring-progress {
+        transition: none;
       }
     }
   </style>
@@ -238,31 +723,85 @@
   </div>
 
   <div id="loading">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div id="grain"></div>
-
-    <div id="loading-content">
-      <svg id="logo-svg" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#8b83ff" />
-            <stop offset="100%" stop-color="#6c63ff" />
-          </linearGradient>
-        </defs>
-        <path d="M6 32 L16 8 L26 32 M10 22 L22 22 M42 32 L52 8 L62 32 M46 22 L58 22" />
-      </svg>
-
-      <div id="loading-meta">
-        <div id="loading-bar-container">
-          <div id="loading-bar"></div>
+    <main id="loading-content" class="loader-shell">
+      <section class="loader-copy">
+        <div class="loader-eyebrow">
+          <span class="loader-live-dot"></span>
+          ABDALLAH AHMED · PORTFOLIO
         </div>
-        <div id="loading-row">
-          <span id="loading-percent">0%</span>
-          <span id="loading-sub">Loading portfolio</span>
+
+        <h1 class="loader-heading">
+          Just a moment,
+          <span>then let's explore.</span>
+        </h1>
+
+        <p class="loader-intro">
+          I’m getting the projects and details ready. This should only take a few seconds.
+        </p>
+
+        <div class="loader-progress-block">
+          <div class="loader-progress-heading">
+            <span id="loading-sub">Preparing your experience</span>
+            <span id="loading-percent">0%</span>
+          </div>
+          <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+          </div>
+          <div class="loader-footnote">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 2.5 17 5v4.7c0 4.1-2.8 6.7-7 7.8-4.2-1.1-7-3.7-7-7.8V5l7-2.5Z" stroke="currentColor"
+                stroke-width="1.3" />
+              <path d="m7 10 2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            Thanks for waiting. The portfolio will open automatically.
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section class="loader-art" aria-label="Portfolio loading animation">
+        <div class="loader-portrait-wrap">
+          <img class="loader-portrait" src="assets/images/profile/cover.webp" alt="Abdallah Ahmed" />
+        </div>
+
+        <svg class="loader-ring" viewBox="0 0 240 240" aria-hidden="true">
+          <defs>
+            <linearGradient id="loaderRingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7167ff" />
+              <stop offset="58%" stop-color="#b9b3ff" />
+              <stop offset="100%" stop-color="#74d5d0" />
+            </linearGradient>
+          </defs>
+          <circle class="loader-ring-track" cx="120" cy="120" r="108" />
+          <circle id="loading-ring-progress" cx="120" cy="120" r="108" />
+        </svg>
+
+        <div class="loader-ring-center" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12m-8.48 8.48-2.12 2.12"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </div>
+
+        <div class="loader-float-card loader-float-top">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Flutter developer
+        </div>
+
+        <div class="loader-float-card loader-float-bottom">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" />
+          </svg>
+          Crafted with passion
+        </div>
+      </section>
+    </main>
   </div>
 
   <script src="flutter_bootstrap.js" async></script>
@@ -271,6 +810,7 @@
     (function () {
       var bar = document.getElementById("loading-bar");
       var percentLabel = document.getElementById("loading-percent");
+      var ringProgress = document.getElementById("loading-ring-progress");
       var loading = document.getElementById("loading");
       var progress = 0;
       var target = 0;
@@ -281,31 +821,39 @@
         progress = p;
         bar.style.width = progress + "%";
         percentLabel.textContent = Math.round(progress) + "%";
+        if (ringProgress) ringProgress.style.strokeDashoffset = (678.6 * (1 - progress / 100)).toFixed(2);
       }
 
       function tick() {
+        raf = null;
         var diff = target - progress;
-        progress += diff * 0.06;
+        progress += diff * 0.08;
         if (Math.abs(diff) < 0.1) progress = target;
         setProgress(progress);
-        if (!finished || progress < 100) {
+
+        // Stop requesting animation frames once the current target is reached.
+        if (Math.abs(target - progress) >= 0.1) {
           raf = requestAnimationFrame(tick);
         }
       }
 
-      target = 92;
-      raf = requestAnimationFrame(tick);
+      function animateTo(value) {
+        target = value;
+        if (raf === null) raf = requestAnimationFrame(tick);
+      }
+
+      animateTo(92);
 
       window.addEventListener("flutter-first-frame", function () {
         finished = true;
-        target = 100;
+        animateTo(100);
         setTimeout(function () {
           loading.classList.add("fade-out");
           setTimeout(function () {
             loading.remove();
           }, 600);
         }, 220);
-      });
+      }, { once: true });
     })();
   </script>
 </body>
